@@ -42,6 +42,21 @@ body {
   margin-left: auto;
 }
 
+.text-btn {
+  background-color: transparent;
+  padding: 0;
+  border: 0;
+  cursor: pointer;
+}
+
+.text-btn:focus {
+  outline: 0;
+}
+
+.danger {
+  color: red;
+}
+
 
 /* Todo List */
 .add-todo {
@@ -63,4 +78,8 @@ body {
 
 .todo-list-item input:checked + label {
  text-decoration: line-through;
-} 
+}
+
+.delete-btn {
+  padding: 5px;
+}

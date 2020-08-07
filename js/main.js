@@ -62,6 +62,7 @@
     return `<li class="flex align-center todo-list-item">
     <input class="mt0 mb0 mr1" type="checkbox" value="${todoItem.id}" id="${todoItem.id}" ${todoItem.isCompleted ? 'checked': ''} />
     <label for="${todoItem.id}">${todoItem.task}</label>
+    <button class="text-btn delete-btn danger js-delete-btn mla" data-id="${todoItem.id}">X</button>
     </li>`;
   }
 
@@ -94,7 +95,7 @@
 
   function toggleTodoItem(id) {
     todoCollection[id].isCompleted = !todoCollection[id].isCompleted;
-    persistData('todoCollection', todoIds, todoCollection);
+    persistData('todoCollection', todoCollection);
   }
 
   function filterTodoitems(category) {
@@ -143,19 +144,37 @@
     renderTodoList(todoListEl, [], {});
   }
 
+  function deleteTodoItem(id) {
+    const todoItemIndex = todoIds.indexOf(Number(id));
+    delete todoCollection[id];
+    todoIds.splice(todoItemIndex, 1);
+
+    persistData('todoCollection', todoCollection);
+    persistData('todoIds', todoIds);
+
+    renderTodoList(todoListEl, todoIds, todoCollection);
+  }
+
   function onAddTodo() {
     const task = addTodoInput.value;
     addTodo(task);
   }
 
-  // Using EventDelegation: for keep code simple and performant
-  function onToggleTodoItem(e) {
+  // Using EventDelegation: to keep our code simple and performant
+  function onClickTodoItem(e) {
+    
     const target = e.target;
     
     if(target.tagName === 'INPUT') {
       e.stopPropagation();
       const id = target.id;
       toggleTodoItem(id);
+    }
+
+    if(target.tagName === 'BUTTON' && target.classList.contains('js-delete-btn')) {
+      e.stopPropagation();
+      const id = target.getAttribute('data-id');
+      deleteTodoItem(id);  
     }
   }
 
@@ -168,12 +187,12 @@
   function onDeleteAll() {
     deleteAll();
   }
-  
+
   init();
   
   // AttachEvents
   addTodoBtn.addEventListener('click', onAddTodo, false);
-  todoListEl.addEventListener('click', onToggleTodoItem, false);
+  todoListEl.addEventListener('click', onClickTodoItem, false);
   filterTodoRadioBtns.forEach((item) => {
     item.addEventListener('input', onFilterTodoItems, false);
   });
