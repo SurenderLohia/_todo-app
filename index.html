@@ -8,7 +8,39 @@
   <link href="css/main.css" rel="stylesheet">
 </head>
 <body>
-  <h1>Todo App</h1>
+  <div class="wrap">
+    <h2 class="font-weight-normal">Todo App</h1>
+    <section class="todo-list-container">
+      <header class="todo-header flex">
+        <div class="flex align-center mr1">
+          <input class="mt0" type="radio" value="all" id="all" name="todo-filter" checked="checked" />
+          <label for="all">All</label>
+        </div>
+        <div class="flex align-center mr1">
+          <input class="mt0" type="radio" value="active" id="active" name="todo-filter" />
+          <label for="active">Active</label>
+        </div>
+        <div class="flex align-center mr1">
+          <input class="mt0" type="radio" value="completed" id="completed" name="todo-filter" />
+          <label for="completed">Completed</label>
+        </div>
+        <div class="flex align-center mla">
+          <button>Delete All</button>
+        </div>
+      </header>
+      <ul class="todo-list">
+        <li class="flex align-center todo-list-item">
+          <input class="mt0 mb0 mr1" type="checkbox" value="todo-id-1" id="todo-id-1" />
+          <label for="todo-id-1">HTML</label>
+        </li>
+        <li class="flex align-center todo-list-item">
+          <input class="mt0 mb0 mr1" type="checkbox" value="todo-id-2" id="todo-id-2" />
+          <label for="todo-id-2">CSS</label>
+        </li>
+      </ul>
+    </section>
+  </div>
+  
 
   <script src="js/main.js"></script>
 </body>
