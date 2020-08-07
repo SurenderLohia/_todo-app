@@ -56,6 +56,7 @@
   const addTodoBtn = document.getElementById('js-add-todo-btn');
   const addTodoInput = document.getElementById('js-add-todo-input');
   const filterTodoRadioBtns =  document.querySelectorAll('.js-filter-todo-radio-btn');
+  const deleteAllBtn = document.getElementById('js-delete-all-btn');
 
   function createListItemEl(todoItem) {
     return `<li class="flex align-center todo-list-item">
@@ -132,6 +133,16 @@
     renderTodoList(todoListEl, filteredTodoIds, filteredTodoCollection);
   }
 
+  function deleteAll() {
+    todoCollection = {};
+    todoIds = [];
+
+    persistData('todoCollection', {});
+    persistData('todoIds', []);
+
+    renderTodoList(todoListEl, [], {});
+  }
+
   function onAddTodo() {
     const task = addTodoInput.value;
     addTodo(task);
@@ -153,14 +164,18 @@
     const category = e.target.value;
     filterTodoitems(category);
   }
+
+  function onDeleteAll() {
+    deleteAll();
+  }
   
   init();
   
   // AttachEvents
   addTodoBtn.addEventListener('click', onAddTodo, false);
   todoListEl.addEventListener('click', onToggleTodoItem, false);
-  
   filterTodoRadioBtns.forEach((item) => {
     item.addEventListener('input', onFilterTodoItems, false);
   });
+  deleteAllBtn.addEventListener('click', onDeleteAll, true);
 })();
