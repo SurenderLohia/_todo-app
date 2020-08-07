@@ -58,3 +58,7 @@ body {
   padding: 10px 10px 10px 0;
   border-bottom: 1px solid #ccc;
 }
+
+.todo-list-item input:checked + label {
+ text-decoration: line-through;
+} 

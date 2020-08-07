@@ -58,7 +58,7 @@
 
   function createListItemEl(todoItem) {
     return `<li class="flex align-center todo-list-item">
-    <input class="mt0 mb0 mr1" type="checkbox" value="${todoItem.id}" id="${todoItem.id}" />
+    <input class="mt0 mb0 mr1" type="checkbox" value="${todoItem.id}" id="${todoItem.id}" ${todoItem.isCompleted ? 'checked': ''} />
     <label for="${todoItem.id}">${todoItem.task}</label>
     </li>`;
   }
@@ -90,13 +90,31 @@
     renderTodoList(todoListEl, todoCollection);
   }
 
+  function toggleTodoItem(id) {
+    todoCollection[id].isCompleted = !todoCollection[id].isCompleted;
+    persistData('todoCollection', todoCollection);
+  }
+
   function onAddTodo() {
     const task = addTodoInput.value;
     addTodo(task);
   }
 
+  // Using EventDelegation: for keep code simple and performant
+  function onToggleTodoItem(e) {
+    const target = e.target;
+    
+    if(target.tagName === 'INPUT') {
+      e.stopPropagation();
+      const id = target.id;
+      toggleTodoItem(id);
+    }
+  }
+  
   init();
-
+  
   // AttachEvents
   addTodoBtn.addEventListener('click', onAddTodo, false);
+  todoListEl.addEventListener('click', onToggleTodoItem, false);
+  
 })();
