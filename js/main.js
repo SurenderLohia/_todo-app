@@ -1,5 +1,11 @@
 // IIFE to create local scope and to avoid global namespacing collision
 (function () {
+  let todoCollection = {};
+  let todoIds = [];
+
+  /* 
+  Data Structure:
+
   const todoCollection = {
     "1": {
       id: 1,
@@ -14,6 +20,36 @@
   };
 
   const todoIds = [1, 2];
+
+  */
+
+  // Localstorage
+  function persistData(key, value) {
+    const valueStirng = JSON.stringify(value);
+    window.localStorage.setItem(key, valueStirng);
+  }
+
+  function getPersistedData(key) {
+    const value = window.localStorage.getItem(key);
+    return JSON.parse(value);
+  }
+
+  function init() {
+    const _todoCollection = getPersistedData('todoCollection');
+    const _todoIds = getPersistedData('todoIds');
+
+    if(_todoCollection) {
+      todoCollection = _todoCollection;
+    }
+
+    if(_todoIds) {
+      todoIds = _todoIds;
+    }
+
+    if(todoIds.length) {
+      renderTodoList(todoListEl, todoCollection);
+    }
+  }
 
   // Dom Elements
   const todoListEl = document.getElementById("js-todo-list");
@@ -46,8 +82,10 @@
 
     todoCollection[todoId] = todoItem;
     todoIds.push(todoItem.id);
-
     addTodoInput.value = '';
+
+    persistData('todoCollection', todoCollection);
+    persistData('todoIds', todoIds);
 
     renderTodoList(todoListEl, todoCollection);
   }
@@ -57,7 +95,7 @@
     addTodo(task);
   }
 
-  renderTodoList(todoListEl, todoCollection);
+  init();
 
   // AttachEvents
   addTodoBtn.addEventListener('click', onAddTodo, false);
