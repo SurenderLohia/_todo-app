@@ -47,7 +47,7 @@
     }
 
     if(todoIds.length) {
-      renderTodoList(todoListEl, todoCollection);
+      renderTodoList(todoListEl, todoIds, todoCollection);
     }
   }
 
@@ -55,6 +55,7 @@
   const todoListEl = document.getElementById("js-todo-list");
   const addTodoBtn = document.getElementById('js-add-todo-btn');
   const addTodoInput = document.getElementById('js-add-todo-input');
+  const filterTodoRadioBtns =  document.querySelectorAll('.js-filter-todo-radio-btn');
 
   function createListItemEl(todoItem) {
     return `<li class="flex align-center todo-list-item">
@@ -63,7 +64,7 @@
     </li>`;
   }
 
-  function renderTodoList(container, todoCollection) {
+  function renderTodoList(container, todoIds, todoCollection) {
     let todoListHTML = "";
     todoIds.forEach((id) => {
       todoListHTML += createListItemEl(todoCollection[id]);
@@ -87,12 +88,48 @@
     persistData('todoCollection', todoCollection);
     persistData('todoIds', todoIds);
 
-    renderTodoList(todoListEl, todoCollection);
+    renderTodoList(todoListEl, todoIds, todoCollection);
   }
 
   function toggleTodoItem(id) {
     todoCollection[id].isCompleted = !todoCollection[id].isCompleted;
-    persistData('todoCollection', todoCollection);
+    persistData('todoCollection', todoIds, todoCollection);
+  }
+
+  function filterTodoitems(category) {
+    console.log('category', category);
+
+    if(category === 'all') {
+      renderTodoList(todoListEl, todoIds, todoCollection);
+      return;
+    }
+    
+    let filteredTodoCollection = {}
+    let filteredTodoIds = [];
+    if(category === 'active') {
+      todoIds.forEach((id) => {
+        const todoItem = todoCollection[id];
+        console.log(todoItem);
+        if(!todoItem.isCompleted) {
+          filteredTodoCollection[id] = todoItem;
+          filteredTodoIds.push(id);
+        }
+      });
+    }
+
+    else if(category === 'completed') {
+      todoIds.forEach((id) => {
+        const todoItem = todoCollection[id];
+        if(todoItem.isCompleted) {
+          filteredTodoCollection[id] = todoItem;
+          filteredTodoIds.push(id);
+        }
+      });
+    } else {
+      filteredTodoCollection = todoCollection;
+    }
+
+    renderTodoList(todoListEl, filteredTodoIds, filteredTodoCollection);
   }
 
   function onAddTodo() {
@@ -110,6 +147,12 @@
       toggleTodoItem(id);
     }
   }
+
+  function onFilterTodoItems(e) {
+    e.stopPropagation();
+    const category = e.target.value;
+    filterTodoitems(category);
+  }
   
   init();
   
@@ -117,4 +160,7 @@
   addTodoBtn.addEventListener('click', onAddTodo, false);
   todoListEl.addEventListener('click', onToggleTodoItem, false);
   
+  filterTodoRadioBtns.forEach((item) => {
+    item.addEventListener('input', onFilterTodoItems, false);
+  });
 })();
