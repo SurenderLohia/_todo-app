@@ -42,6 +42,14 @@ body {
 
 
 /* Todo List */
+.add-todo {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
 .todo-list {
   padding-left: 0;
 }

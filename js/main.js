@@ -7,13 +7,18 @@
       isCompleted: false,
     },
     "2": {
-      id: 1,
+      id: 2,
       task: "CSS",
       isCompleted: false,
     },
   };
 
   const todoIds = [1, 2];
+
+  // Dom Elements
+  const todoListEl = document.getElementById("js-todo-list");
+  const addTodoBtn = document.getElementById('js-add-todo-btn');
+  const addTodoInput = document.getElementById('js-add-todo-input');
 
   function createListItemEl(todoItem) {
     return `<li class="flex align-center todo-list-item">
@@ -31,8 +36,29 @@
     container.innerHTML = todoListHTML;
   }
 
-  // Dom Elements
-  const todoListEl = document.getElementById("js-todo-list");
+  function addTodo(task) {
+    const todoId = todoIds.length + 1;
+    const todoItem = {
+      id: todoId,
+      task,
+      isCompleted: false,
+    };
+
+    todoCollection[todoId] = todoItem;
+    todoIds.push(todoItem.id);
+
+    addTodoInput.value = '';
+
+    renderTodoList(todoListEl, todoCollection);
+  }
+
+  function onAddTodo() {
+    const task = addTodoInput.value;
+    addTodo(task);
+  }
 
   renderTodoList(todoListEl, todoCollection);
+
+  // AttachEvents
+  addTodoBtn.addEventListener('click', onAddTodo, false);
 })();
